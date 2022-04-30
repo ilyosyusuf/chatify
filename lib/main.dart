@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'Chatify',
       // home: TestPage(),
       // home: SignUpPage(),
-      initialRoute: '/fillprofile',
+      initialRoute: '/signup',
       onGenerateRoute: MyRoute.instance.onGenerateRoute,
     );
   }

@@ -7,7 +7,7 @@ class MyTextField{
       IconButton? iconButton,
       // Icon? suffixIcon,
       required TextEditingController controller,
-      Icon? prefixIcon, bool read = false, var onChanged, VoidCallback? onTap, bool? obscure = false}) {
+      Icon? prefixIcon, bool read = false, var onChanged, VoidCallback? onTap, bool? obscure = false, String? validator}) {
     return TextFormField(
       controller: controller,
       readOnly: read,
@@ -30,7 +30,9 @@ class MyTextField{
           borderRadius: BorderRadius.circular(15.0),
         ),
       ),
-      // validator: (v)=> v!.length < 5 ? "5 tadan kam bo'lmasin!" : null
+      validator: (v)=> v!.isEmpty ? validator : "",
+      
+      // (v)=> v!.length < 5 ? "5 tadan kam bo'lmasin!" : null
     );
   }
 }

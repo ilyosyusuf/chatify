@@ -83,10 +83,10 @@ class SignUpPage extends StatelessWidget {
                       FadeInUp(
                           child: ElevatedButtonWidget(
                               text: "Sign Up",
-                              onPressed: (){
-                                WriteService().signUp(emailController.text.trim(), passwordController.text.trim());
-                                WriteService().saveToStore();
-                                // Navigator.pushNamedAndRemoveUntil(context, '/fillprofile', (route) => false);
+                              onPressed: ()async{
+                                await WriteService().signUp(emailController.text.trim(), passwordController.text.trim());
+                                await WriteService().saveToStore();
+                                Navigator.pushNamedAndRemoveUntil(context, '/fillprofile', (route) => false);
                               }
                             ),
                               
