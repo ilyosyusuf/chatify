@@ -7,10 +7,13 @@ class WriteService{
   String? ids;
     Future signUp(String emailController, String passwordController) async {
     try {
+      
       await FireService.auth.createUserWithEmailAndPassword(
         email: emailController,
         password: passwordController,
       );
+      
+      await FireService.auth.currentUser!.sendEmailVerification();
       
     } catch (e) {
       print("Error");

@@ -1,5 +1,6 @@
 import 'package:chatify/services/firebase/fire_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class SendMessageProvider extends ChangeNotifier{
@@ -68,6 +69,47 @@ class SendMessageProvider extends ChangeNotifier{
     } catch (e) {
       print(e);
     }
+  }
+
+  Future loginWithOtp(String phoneController)async{
+    await FireService.auth.verifyPhoneNumber(
+      phoneNumber: phoneController,
+
+      verificationCompleted: (PhoneAuthCredential credential) async{
+        await FireService.auth.signInWithCredential(credential);
+      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=> MyHomePage()), (route) => false);
+      print("Excellent");
+      },
+      verificationFailed: (FirebaseAuthException e){
+        if(e.code == 'invalid-phone-number'){
+          // showSnackBar('The provided phone number is not valid', Colors.red);
+          print('The provided phone number is not valid');
+        }else{
+          // showSnackBar('Another Error Type!', Colors.red);
+        print('Another Error Type!');
+        }
+      },
+      codeSent: (String verificationId, [int? resendToken]) async{
+        String smsCode = '112233';
+
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, 
+          smsCode: smsCode
+        );
+        try {
+          var firebaseUser = await FireService.auth.signInWithCredential(credential);
+          print(firebaseUser.user);
+        } catch (e) {
+          print(e);
+        }
+        // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=> MyHomePage()), (route) => false);
+        // print("excellent");
+      },
+
+      codeAutoRetrievalTimeout: (String verificationId){},
+    
+    );
+    notifyListeners();
   }
 
 }

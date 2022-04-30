@@ -1,5 +1,9 @@
+import 'package:chatify/config/routes/my_route.dart';
 import 'package:chatify/providers/send_message_provider.dart';
 import 'package:chatify/view/pages/homepage.dart';
+import 'package:chatify/view/pages/login/change_provider.dart';
+import 'package:chatify/view/pages/login/sign_up_page.dart';
+import 'package:chatify/view/pages/test_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +14,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SendMessageProvider())
+        ChangeNotifierProvider(create: (context) => SendMessageProvider()),
+        ChangeNotifierProvider(create: (context) => ChangeProvider()),
       ],
       child: MyApp(),
     ),
@@ -23,8 +28,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: const MyHomePage(),
+      debugShowCheckedModeBanner: false,
+      title: 'Chatify',
+      // home: TestPage(),
+      home: SignUpPage(),
+      // initialRoute: '/home',
+      // onGenerateRoute: MyRoute.instance.onGenerateRoute,
     );
   }
 }
