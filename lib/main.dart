@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Chatify',
       // home: TestPage(),
-      home: SignUpPage(),
-      // initialRoute: '/home',
-      // onGenerateRoute: MyRoute.instance.onGenerateRoute,
+      // home: SignUpPage(),
+      initialRoute: '/fillprofile',
+      onGenerateRoute: MyRoute.instance.onGenerateRoute,
     );
   }
 }

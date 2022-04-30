@@ -1,5 +1,7 @@
 import 'package:chatify/view/pages/homepage.dart';
+import 'package:chatify/view/pages/login/sign_in_page.dart';
 import 'package:chatify/view/pages/login/sign_up_page.dart';
+import 'package:chatify/view/pages/profile/fill_profile_page.dart';
 import 'package:flutter/material.dart';
 
 class MyRoute {
@@ -15,6 +17,10 @@ class MyRoute {
         return _pages(MyHomePage());
       case '/signup':
         return _pages(SignUpPage());
+      case '/signin':
+        return _pages(SignInPage());
+      case '/fillprofile':
+        return _pages(FillProfilePage());
       default:
     }
   }
