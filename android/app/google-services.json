@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "153799405916",
+    "project_id": "chatify-ef7b0",
+    "storage_bucket": "chatify-ef7b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:153799405916:android:c97a7b9290507836b11199",
+        "android_client_info": {
+          "package_name": "com.ilyosyusuf.chatify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "153799405916-pflb4m000gdbtc06v6l934o2qonculll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ilyosyusuf.chatify",
+            "certificate_hash": "34211b00222312a5db9519501b2bf921bafd6fa9"
+          }
+        },
+        {
+          "client_id": "153799405916-jd45bfos7of3jd2q6dono3lemgm7fvqo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS7jBMwp1_BkAS4fe1YVCRRpOm_U-roM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "153799405916-jd45bfos7of3jd2q6dono3lemgm7fvqo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
