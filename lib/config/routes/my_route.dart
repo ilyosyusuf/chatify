@@ -1,7 +1,7 @@
-import 'package:chatify/view/pages/homepage.dart';
 import 'package:chatify/view/pages/login/sign_in_page.dart';
 import 'package:chatify/view/pages/login/sign_up_page.dart';
 import 'package:chatify/view/pages/profile/fill_profile_page.dart';
+import 'package:chatify/view/screens/mainscreen/homescreen.dart';
 import 'package:flutter/material.dart';
 
 class MyRoute {
@@ -14,7 +14,7 @@ class MyRoute {
     var args = settings.arguments;
     switch (settings.name) {
       case '/home':
-        return _pages(MyHomePage());
+        return _pages(HomeScreen());
       case '/signup':
         return _pages(SignUpPage());
       case '/signin':

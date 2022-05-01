@@ -1,6 +1,5 @@
 import 'package:chatify/config/routes/my_route.dart';
 import 'package:chatify/providers/send_message_provider.dart';
-import 'package:chatify/view/pages/homepage.dart';
 import 'package:chatify/view/pages/login/change_provider.dart';
 import 'package:chatify/view/pages/login/sign_up_page.dart';
 import 'package:chatify/view/pages/test_page.dart';
@@ -30,9 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Chatify',
-      // home: TestPage(),
-      // home: SignUpPage(),
-      initialRoute: '/signup',
+      initialRoute: '/home',
       onGenerateRoute: MyRoute.instance.onGenerateRoute,
     );
   }
