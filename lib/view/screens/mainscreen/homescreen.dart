@@ -1,4 +1,5 @@
 import 'package:awesome_icons/awesome_icons.dart';
+import 'package:chatify/view/pages/chat/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           Container(color: Colors.yellow),
-          Container(color: Colors.red),
+          ChatPage(),
           Container(color: Colors.green),
         ],
       ),

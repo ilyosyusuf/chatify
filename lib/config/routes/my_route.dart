@@ -1,3 +1,4 @@
+import 'package:chatify/view/pages/chat/chat_page.dart';
 import 'package:chatify/view/pages/login/sign_in_page.dart';
 import 'package:chatify/view/pages/login/sign_up_page.dart';
 import 'package:chatify/view/pages/profile/fill_profile_page.dart';
@@ -21,6 +22,8 @@ class MyRoute {
         return _pages(SignInPage());
       case '/fillprofile':
         return _pages(FillProfilePage());
+            case '/chat':
+        return _pages(ChatPage());
       default:
     }
   }

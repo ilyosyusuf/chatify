@@ -4,6 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 class SendMessageProvider extends ChangeNotifier{
+  SendMessageProvider(){
+    fillList();
+    updateList();
+  }
     List<String> usersList = [];
   List sortList = [];
   List messageList = [];
@@ -43,12 +47,13 @@ class SendMessageProvider extends ChangeNotifier{
 
             messageList.add({
             "from": from,
+            "email_from": FireService.auth.currentUser!.email,
             "sent_at": DateTime.now(),
             "message": message,
           });
 
     try {
-      await FireService.store.collection('messages').doc("${sortList.first}${sortList.last}").collection('coll').doc("${sortList.first}${sortList.last}").set({
+      await FireService.store.collection('messages').doc("${sortList.first}${sortList.last}").collection('coll').doc("${sortList.first}${sortList.last}").update({
           "messageList": messageList,
       });SetOptions(merge: true);
       notifyListeners();
@@ -62,7 +67,7 @@ class SendMessageProvider extends ChangeNotifier{
 
   Future updateList()async{
     try {
-      await FireService.store.collection('messages').doc("${sortList.first}${sortList.last}").get().then((value){
+      await FireService.store.collection('messages').doc("${sortList.first}${sortList.last}").collection('coll').doc("${sortList.first}${sortList.last}").get().then((value){
         messageList = value.data()!['messageList'];
         print(messageList);
       });
@@ -110,6 +115,36 @@ class SendMessageProvider extends ChangeNotifier{
     
     );
     notifyListeners();
+  }
+
+
+  Set setList = {};
+  List allData = [];
+  Future fillList() async{
+    await FireService.store.collection('chats').get().then((value){
+      for (var item in value.docs) {
+        if (item.id == FireService.auth.currentUser!.email.toString()) {
+          continue;
+        }else{
+          allData.add(item);
+        }
+        // print(allData);
+      }
+    });
+  }
+  Future searchIt(String text) async {
+    setList.clear();
+    for (var i = 0; i < allData.length; i++) {
+      // print(allData[i]);
+      if (text.isEmpty) {
+                setList.clear();
+        notifyListeners();
+      }else if(allData[i].id.toString().toLowerCase().contains(text.toLowerCase())){
+        setList.add(allData[i]);
+        print(setList.toList());
+        
+      }
+    }
   }
 
 }
