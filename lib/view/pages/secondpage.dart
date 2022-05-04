@@ -10,6 +10,7 @@ import 'package:chatify/services/firebase/fire_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 // class SecondPage extends StatefulWidget {
@@ -22,6 +23,7 @@ import 'package:provider/provider.dart';
 class SecondPage extends StatelessWidget {
   String? name;
   SecondPage({Key? key, this.name}) : super(key: key);
+  bool issender = false;
 
   // @override
   // void initState() {
@@ -106,20 +108,22 @@ class SecondPage extends StatelessWidget {
                       // height: 500,
                       child: data['messageList'].isNotEmpty
                           ? ListView.builder(
+                            // clipBehavior: Clip.antiAliasWithSaveLayer,
                               dragStartBehavior: DragStartBehavior.down,
-                              reverse: true,
-                              shrinkWrap: true,
+                              // reverse: true,
+                              // shrinkWrap: true,
                               itemBuilder: (context, i) {
                                 return BubbleSpecialThree(
+                                  key: UniqueKey(),
                                   text: data['messageList']
-                                      .reversed
+                                      // .reversed
                                       .toList()[i]['message'].toString(),
-                                  color: Color(0xFF1B97F3),
+                                  color: data['messageList'][i]['email_from'] == FireService.auth.currentUser!.email.toString() ?Color(0xFF1B97F3) : Colors.grey,
                                   // color: ColorConst.kPrimaryColor,
                                   tail: false,
-                                  isSender: FireService.auth.currentUser!.email.toString() == data['messageList'][i]['email_from'],
+                                  isSender: data['messageList'][i]['email_from'] == FireService.auth.currentUser!.email.toString() ? true : false,
                                   textStyle: TextStyle(
-                                      color: Colors.white, fontSize: 16),
+                                      color: Colors.white, fontSize: 18),
                                 );
                                 // return ListTile(
                                 //   title: Text(data['messageList']
@@ -129,11 +133,9 @@ class SecondPage extends StatelessWidget {
                               },
                               itemCount: data['messageList'].length,
                             )
-                          : Container(
-                              child: Center(
-                                child: Text("No Data Yet"),
-                              ),
-                            ),
+                          : Center(
+                            child: Lottie.asset('assets/lotties/nomessages.json', width: 200)
+                          ),
                     ),
                   ),
                   Row(
@@ -164,6 +166,7 @@ class SecondPage extends StatelessWidget {
                             await context
                                 .read<SendMessageProvider>()
                                 .sendMessage("men", _controller.text);
+                                // data['messageList'][i]['email_from'] == FireService.auth.currentUser!.email.toString();
                           },
                         ),
                       )

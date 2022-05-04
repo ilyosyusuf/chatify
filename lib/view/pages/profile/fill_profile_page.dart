@@ -140,6 +140,7 @@ class FillProfilePage extends StatelessWidget {
                           child: ElevatedButtonWidget(
                               onPressed: () async {
                                 await WriteService().fillProfile(context, image!, firstnameController.text, lastnameController.text);
+                                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                               }, text: "Save")),
                     ],
                   ),

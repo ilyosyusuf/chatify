@@ -1,4 +1,5 @@
 import 'package:awesome_icons/awesome_icons.dart';
+import 'package:chatify/core/base/base_view.dart';
 import 'package:chatify/view/pages/chat/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
@@ -12,17 +13,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController _controller = PageController();
-  int selectedIndex = 1;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseView(viewModel: HomeScreen, OnPageBuilder: (context, widget){
+      return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: PageView(
         controller: _controller,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          Container(color: Colors.yellow),
           ChatPage(),
+          Container(color: Colors.yellow),
           Container(color: Colors.green),
         ],
       ),
@@ -41,21 +44,20 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedIndex: selectedIndex,
         barItems: [
           BarItem(
-            icon: FontAwesomeIcons.users,
-            
-            title: 'Contacts',
-          ),
-          BarItem(
             icon: FontAwesomeIcons.comment,
             title: 'Chats',
+          ),
+          BarItem(
+            icon: FontAwesomeIcons.users,
+            title: 'Contacts',
           ),
           BarItem(
             icon: FontAwesomeIcons.list,
             title: 'More',
           ),
-
         ],
       ),
     );
+    });
   }
 }

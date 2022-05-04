@@ -1,5 +1,6 @@
 import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/providers/send_message_provider.dart';
+import 'package:chatify/services/firebase/fire_service.dart';
 import 'package:chatify/services/firebase/read_service.dart';
 import 'package:chatify/view/pages/secondpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,34 +18,49 @@ class _ChatPageState extends State<ChatPage> {
   TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<SendMessageProvider>().updateList();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Container(
         child: Column(
           children: [
+            Container(
+                height: size.height * 0.07,
+                color: Colors.white,
+                child: Row(
+                  children: [
+                    SizedBox(width: size.width * 0.03),
+                    Text(
+                      "Chats",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                  ],
+                )),
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Container(
                   child: MyTextField.textField(
                     text: 'search...',
                     controller: _searchController,
                     onChanged: (text) async {
-                      // context.read<AddProvider>().searchIt(text);
-                      // await FireHome().searchIt(_searchController.text);
-                      // await context.read<SendMessageProvider>().searchIt(_searchController.text);
                       await Provider.of<SendMessageProvider>(context,
                               listen: false)
                           .searchIt(_searchController.text);
-                          setState(() {
-                            
-                          });
-                      // var allData = Provider.of<SendMessageProvider>(context, listen: false).allData;
-                      // print(allData);
-                      // print(context.watch<SendMessageProvider>().setList);
-                      // var list = FireHome().setList.toList();
-                      // print(list);
+                      setState(
+                        () {},
+                      );
                     },
                     onTap: () {
                       _searchController.clear();
@@ -60,9 +76,9 @@ class _ChatPageState extends State<ChatPage> {
             Expanded(
               flex: 9,
               child: Container(
-                child: FutureBuilder(
-                  future: FireHome.getData(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snap) {
+                child: StreamBuilder<QuerySnapshot<Map>>(
+                  stream: FireService.store.collection('chats').doc('${FireService.auth.currentUser!.email}').collection('${FireService.auth.currentUser!.email}').snapshots(),
+                  builder: (context, snap) {
                     if (!snap.hasData) {
                       return Center(
                         child: CircularProgressIndicator.adaptive(),
@@ -74,23 +90,99 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                       );
                     } else {
-
-                      return Container(
-                        child: ListView.builder(
-                          itemBuilder: (context, i){
-                            return ListTile(
-                              title: Text("${context.watch<SendMessageProvider>().setList.toList()[i].id}"),
-                              onTap: () async{
-                                await context.read<SendMessageProvider>().bindUsers(Provider.of<SendMessageProvider>(context, listen: false).setList.toList()[i].id);
-                                await context.read<SendMessageProvider>().updateList();
-                                // await context.read<SendMessageProvider>().sendMessage("Ilyos", "Hello");
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> SecondPage(name: Provider.of<SendMessageProvider>(context, listen: false).setList.toList()[i]['firstname'])));
-                              },
+                      return _searchController.text.isEmpty
+                          ? Container(
+                              child: ListView.builder(
+                                  itemBuilder: (context, i) {
+                                    return ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            '${snap.data!.docs[i]['avatar_image_url']}'),
+                                      ),
+                                      title: Text(
+                                          '${snap.data!.docs[i]['firstname']}'),
+                                      // subtitle: Text(
+                                      //     "${context.watch<SendMessageProvider>().last ?? "Send message first"}",
+                                      //     overflow: TextOverflow.clip,
+                                      //     maxLines: 1),
+                                      onTap: () async {
+                                        await context
+                                            .read<SendMessageProvider>()
+                                            .bindUsers(snap.data!.docs[i].id
+                                                .toString());
+                                        // await context.read<SendMessageProvider>().createColl();
+                                        await context
+                                            .read<SendMessageProvider>()
+                                            .createField();
+                                        await context
+                                            .read<SendMessageProvider>()
+                                            .updateList();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SecondPage(
+                                                        name: snap.data!.docs[i]
+                                                            ['firstname'])));
+                                      },
+                                    );
+                                  },
+                                  itemCount: snap.data!.docs.length),
+                            )
+                          : Container(
+                              child: ListView.builder(
+                                  itemBuilder: (context, i) {
+                                    return ListTile(
+                                      title: Text(
+                                          "${context.watch<SendMessageProvider>().setList.toList()[i].id}"),
+                                      onTap: () async {
+                                        await context
+                                            .read<SendMessageProvider>()
+                                            .bindUsers(Provider.of<
+                                                        SendMessageProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .setList
+                                                .toList()[i]
+                                                .id);
+                                        if (context
+                                            .read<SendMessageProvider>()
+                                            .messageList
+                                            .isEmpty) {
+                                          await context
+                                              .read<SendMessageProvider>()
+                                              .createColl();
+                                        }
+                                        await context
+                                            .read<SendMessageProvider>()
+                                            .createField();
+                                        await context
+                                            .read<SendMessageProvider>()
+                                            .updateList();
+                                        // await context.read<SendMessageProvider>().dialogWith();
+                                        // await context.read<SendMessageProvider>().fillDial();
+                                        // await context.read<SendMessageProvider>().sendMessage("Ilyos", "Hello");
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => SecondPage(
+                                                name: Provider.of<
+                                                            SendMessageProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .setList
+                                                    .toList()[i]['firstname']),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  itemCount: context
+                                      .watch<SendMessageProvider>()
+                                      .setList
+                                      .toList()
+                                      .length),
                             );
-                          },
-                          itemCount: context.watch<SendMessageProvider>().setList.toList().length
-                        ),
-                      );
                     }
                   },
                 ),
@@ -100,5 +192,12 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    context.read<SendMessageProvider>().updateList();
   }
 }
