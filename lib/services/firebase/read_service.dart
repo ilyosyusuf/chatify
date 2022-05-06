@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FireHome {
   static QuerySnapshot<Map<String, dynamic>>? myData;
+  
   static Future<QuerySnapshot<Map<String, dynamic>>> getData() async {
     try {
       await FireService.store

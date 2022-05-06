@@ -21,6 +21,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:chatify/core/components/box_decoration_widget.dart';
 import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/core/constants/colors.dart';
+import 'package:chatify/core/extensions/context_extensions.dart';
 import 'package:chatify/services/authenservice/write_service.dart';
 import 'package:chatify/view/pages/login/change_provider.dart';
 import 'package:chatify/view/widgets/elevated_button_widget.dart';
@@ -60,12 +61,11 @@ class FillProfilePage extends StatelessWidget {
                             child: image != null
                                 ? CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    radius:
-                                        MediaQuery.of(context).size.width * 0.15,
-                                    backgroundImage: FileImage(File(image!.path)))
+                                    radius: context.w * 0.15,
+                                    backgroundImage:
+                                        FileImage(File(image!.path)))
                                 : CircleAvatar(
-                                    radius:
-                                        MediaQuery.of(context).size.width * 0.15,
+                                    radius: context.w * 0.15,
                                     backgroundImage:
                                         AssetImage('assets/images/user.png'),
                                   ),
@@ -137,11 +137,18 @@ class FillProfilePage extends StatelessWidget {
                         ),
                       ),
                       FadeInUp(
-                          child: ElevatedButtonWidget(
-                              onPressed: () async {
-                                await WriteService().fillProfile(context, image!, firstnameController.text, lastnameController.text);
-                                Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-                              }, text: "Save")),
+                        child: ElevatedButtonWidget(
+                            onPressed: () async {
+                              await WriteService().fillProfile(
+                                  context,
+                                  image!,
+                                  firstnameController.text,
+                                  lastnameController.text);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/home', (route) => false);
+                            },
+                            text: "Save"),
+                      ),
                     ],
                   ),
                 ),
@@ -161,12 +168,12 @@ class FillProfilePage extends StatelessWidget {
                             style: TextStyle(color: Colors.grey),
                           ),
                           TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Sign Up",
-                                style:
-                                    TextStyle(color: ColorConst.kPrimaryColor),
-                              ))
+                            onPressed: () {},
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(color: ColorConst.kPrimaryColor),
+                            ),
+                          ),
                         ],
                       ),
                     ),

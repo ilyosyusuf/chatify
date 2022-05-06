@@ -5,6 +5,7 @@ import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_two.dart';
 import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/core/constants/colors.dart';
+import 'package:chatify/core/extensions/context_extensions.dart';
 import 'package:chatify/providers/send_message_provider.dart';
 import 'package:chatify/services/firebase/fire_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,7 +23,8 @@ import 'package:provider/provider.dart';
 
 class SecondPage extends StatelessWidget {
   String? name;
-  SecondPage({Key? key, this.name}) : super(key: key);
+  String? imageurl;
+  SecondPage({Key? key, this.name, this.imageurl}) : super(key: key);
   bool issender = false;
 
   // @override
@@ -76,7 +78,7 @@ class SecondPage extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                      height: size.height * 0.07,
+                      height: context.h * 0.07,
                       color: Colors.white,
                       child: Row(
                         children: [
@@ -87,6 +89,8 @@ class SecondPage extends StatelessWidget {
                                   context, '/home', (route) => false);
                             },
                           ),
+                          CircleAvatar(backgroundImage: NetworkImage(imageurl.toString()),),
+                          SizedBox(width: size.width * 0.02),
                           Text(
                             name.toString(),
                             style: TextStyle(fontSize: 20),
@@ -144,7 +148,7 @@ class SecondPage extends StatelessWidget {
                           child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: size.height * 0.065,
+                          height: context.h * 0.065,
                           child: MyTextField.textField(
                               text: "Write a message", controller: _controller),
                         ),

@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:chatify/core/components/box_decoration_widget.dart';
 import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/core/constants/colors.dart';
+import 'package:chatify/core/extensions/context_extensions.dart';
 import 'package:chatify/view/pages/login/change_provider.dart';
 import 'package:chatify/view/widgets/elevated_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ class SignInPage extends StatelessWidget {
   bool? isShown = true;
   @override
   Widget build(BuildContext context) {
-  var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -25,7 +25,7 @@ class SignInPage extends StatelessWidget {
                 flex: 3,
                 child: FadeInDown(
                   child: Container(
-                      width: size.width,
+                      width: context.w,
                       child: Lottie.asset('assets/lotties/signup.json')),
                 )),
             Expanded(

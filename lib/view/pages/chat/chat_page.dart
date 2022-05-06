@@ -1,8 +1,10 @@
 import 'package:chatify/core/components/text_field.dart';
+import 'package:chatify/core/extensions/context_extensions.dart';
 import 'package:chatify/providers/send_message_provider.dart';
 import 'package:chatify/services/firebase/fire_service.dart';
 import 'package:chatify/services/firebase/read_service.dart';
 import 'package:chatify/view/pages/secondpage.dart';
+import 'package:chatify/view/widgets/search_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,18 +28,16 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     return SafeArea(
       child: Container(
         child: Column(
           children: [
             Container(
-                height: size.height * 0.07,
+                height: context.h * 0.07,
                 color: Colors.white,
                 child: Row(
                   children: [
-                    SizedBox(width: size.width * 0.03),
+                    SizedBox(width: context.w * 0.03),
                     Text(
                       "Chats",
                       style:
@@ -77,7 +77,11 @@ class _ChatPageState extends State<ChatPage> {
               flex: 9,
               child: Container(
                 child: StreamBuilder<QuerySnapshot<Map>>(
-                  stream: FireService.store.collection('chats').doc('${FireService.auth.currentUser!.email}').collection('${FireService.auth.currentUser!.email}').snapshots(),
+                  stream: FireService.store
+                      .collection('chats')
+                      .doc('${FireService.auth.currentUser!.email}')
+                      .collection('${FireService.auth.currentUser!.email}')
+                      .snapshots(),
                   builder: (context, snap) {
                     if (!snap.hasData) {
                       return Center(
@@ -101,6 +105,8 @@ class _ChatPageState extends State<ChatPage> {
                                       ),
                                       title: Text(
                                           '${snap.data!.docs[i]['firstname']}'),
+                                      subtitle: Text(
+                                          '${snap.data!.docs[i].id}'),
                                       // subtitle: Text(
                                       //     "${context.watch<SendMessageProvider>().last ?? "Send message first"}",
                                       //     overflow: TextOverflow.clip,
@@ -110,79 +116,28 @@ class _ChatPageState extends State<ChatPage> {
                                             .read<SendMessageProvider>()
                                             .bindUsers(snap.data!.docs[i].id
                                                 .toString());
-                                        // await context.read<SendMessageProvider>().createColl();
                                         await context
                                             .read<SendMessageProvider>()
                                             .createField();
                                         await context
                                             .read<SendMessageProvider>()
                                             .updateList();
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SecondPage(
-                                                        name: snap.data!.docs[i]
-                                                            ['firstname'])));
-                                      },
-                                    );
-                                  },
-                                  itemCount: snap.data!.docs.length),
-                            )
-                          : Container(
-                              child: ListView.builder(
-                                  itemBuilder: (context, i) {
-                                    return ListTile(
-                                      title: Text(
-                                          "${context.watch<SendMessageProvider>().setList.toList()[i].id}"),
-                                      onTap: () async {
-                                        await context
-                                            .read<SendMessageProvider>()
-                                            .bindUsers(Provider.of<
-                                                        SendMessageProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .setList
-                                                .toList()[i]
-                                                .id);
-                                        if (context
-                                            .read<SendMessageProvider>()
-                                            .messageList
-                                            .isEmpty) {
-                                          await context
-                                              .read<SendMessageProvider>()
-                                              .createColl();
-                                        }
-                                        await context
-                                            .read<SendMessageProvider>()
-                                            .createField();
-                                        await context
-                                            .read<SendMessageProvider>()
-                                            .updateList();
-                                        // await context.read<SendMessageProvider>().dialogWith();
-                                        // await context.read<SendMessageProvider>().fillDial();
-                                        // await context.read<SendMessageProvider>().sendMessage("Ilyos", "Hello");
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => SecondPage(
-                                                name: Provider.of<
-                                                            SendMessageProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .setList
-                                                    .toList()[i]['firstname']),
+                                              name: snap.data!.docs[i]
+                                                  ['firstname'],
+                                              imageurl: snap.data!.docs[i]['avatar_image_url'],
+                                            ),
                                           ),
                                         );
                                       },
                                     );
                                   },
-                                  itemCount: context
-                                      .watch<SendMessageProvider>()
-                                      .setList
-                                      .toList()
-                                      .length),
-                            );
+                                  itemCount: snap.data!.docs.length),
+                            )
+                          : SearchWidget();
                     }
                   },
                 ),
@@ -201,3 +156,4 @@ class _ChatPageState extends State<ChatPage> {
     context.read<SendMessageProvider>().updateList();
   }
 }
+

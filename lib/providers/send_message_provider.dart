@@ -24,7 +24,48 @@ class SendMessageProvider extends ChangeNotifier {
             sortList.add("${FireService.auth.currentUser!.email}");
             sortList.add("${value.docs[i].id}");
             sortList.sort();
-            // diaList.add(value.docs[i].id);
+            diaList.add(value.docs[i].id);
+            if(value.docs[i].id != FireService.store
+                .collection('chats')
+                .doc("${FireService.auth.currentUser!.email}")
+                .collection("${FireService.auth.currentUser!.email}")
+                .doc("${value.docs[i].id}")){
+
+              FireService.store
+                .collection('chats')
+                .doc("${FireService.auth.currentUser!.email}")
+                .collection("${FireService.auth.currentUser!.email}")
+                .doc("${value.docs[i].id}")
+                .set({
+              "avatar_image_url": value.docs[i]['avatar_image_url'],
+              "firstname": value.docs[i]['firstname'],
+              "lastname": value.docs[i]['lastname'],
+              "created_at": value.docs[i]['created_at'],
+            });
+                }
+            print(sortList);
+          }
+        }
+      });
+    } catch (e) {
+      print("error");
+    }
+    notifyListeners();
+  }
+
+  Future dialogWith(
+    String secondEmail,
+  ) async {
+    try {
+      await FireService.store.collection('chats').get().then((value) {
+        sortList.clear();
+        for (var i = 0; i < value.docs.length; i++) {
+          usersList.add(value.docs[i].id.toString());
+          if (secondEmail == value.docs[i].id) {
+            sortList.add("${FireService.auth.currentUser!.email}");
+            sortList.add("${value.docs[i].id}");
+            sortList.sort();
+            diaList.add(value.docs[i].id);
             FireService.store
                 .collection('chats')
                 .doc("${FireService.auth.currentUser!.email}")
@@ -49,7 +90,7 @@ class SendMessageProvider extends ChangeNotifier {
               "created_at": value.docs[i]['created_at'],
             });
 
-            print(sortList);
+            // print(sortList);
           }
         }
       });
@@ -58,6 +99,7 @@ class SendMessageProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
 
   // Future dialogWith()async{
   //   // try {
