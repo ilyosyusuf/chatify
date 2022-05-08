@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chatify/services/firebase/fire_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -59,5 +60,25 @@ class WriteService {
     } catch (e) {
       print("Error while updating!");
     }
+  }
+
+
+  Future signIn(BuildContext context, String emailController,
+      String passwordController) async {
+    try {
+      await FireService.auth.signInWithEmailAndPassword(
+        email: emailController,
+        password: passwordController,
+      );
+        // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+       print(e);
+      } else if (e.code == 'wrong-password') {
+        print(e);
+
+      }
+    }
+
   }
 }

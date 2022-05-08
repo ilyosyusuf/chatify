@@ -61,11 +61,11 @@ class FillProfilePage extends StatelessWidget {
                             child: image != null
                                 ? CircleAvatar(
                                     backgroundColor: Colors.transparent,
-                                    radius: context.w * 0.15,
+                                    radius: MediaQuery.of(context).size.width * 0.15,
                                     backgroundImage:
                                         FileImage(File(image!.path)))
                                 : CircleAvatar(
-                                    radius: context.w * 0.15,
+                                    radius: MediaQuery.of(context).size.width * 0.15,
                                     backgroundImage:
                                         AssetImage('assets/images/user.png'),
                                   ),

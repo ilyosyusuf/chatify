@@ -108,6 +108,8 @@ class _ChatPageState extends State<ChatPage> {
                                       subtitle: Text(
                                           '${snap.data!.docs[i].id}'),
                                       // subtitle: Text(
+                                      //     "${Provider.of<SendMessageProvider>(context, listen: false).messageList.last['message']}"),
+                                      // subtitle: Text(
                                       //     "${context.watch<SendMessageProvider>().last ?? "Send message first"}",
                                       //     overflow: TextOverflow.clip,
                                       //     maxLines: 1),
@@ -116,6 +118,7 @@ class _ChatPageState extends State<ChatPage> {
                                             .read<SendMessageProvider>()
                                             .bindUsers(snap.data!.docs[i].id
                                                 .toString());
+                                                await context.read<SendMessageProvider>().second();
                                         await context
                                             .read<SendMessageProvider>()
                                             .createField();
@@ -128,7 +131,8 @@ class _ChatPageState extends State<ChatPage> {
                                             builder: (context) => SecondPage(
                                               name: snap.data!.docs[i]
                                                   ['firstname'],
-                                              imageurl: snap.data!.docs[i]['avatar_image_url'],
+                                              imageurl: snap.data!.docs[i]
+                                                  ['avatar_image_url'],
                                             ),
                                           ),
                                         );
@@ -156,4 +160,3 @@ class _ChatPageState extends State<ChatPage> {
     context.read<SendMessageProvider>().updateList();
   }
 }
-

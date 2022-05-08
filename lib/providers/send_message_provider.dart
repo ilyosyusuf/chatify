@@ -12,39 +12,44 @@ class SendMessageProvider extends ChangeNotifier {
   List sortList = [];
   List messageList = [];
   List diaList = [];
-  Future bindUsers(
-    String secondEmail,
-  ) async {
+  var valueId;
+  Future bindUsers(String secondEmail) async {
     try {
       await FireService.store.collection('chats').get().then((value) {
         sortList.clear();
         for (var i = 0; i < value.docs.length; i++) {
           usersList.add(value.docs[i].id.toString());
           if (secondEmail == value.docs[i].id) {
+            //betta value tanlangan bobturibti
+
             sortList.add("${FireService.auth.currentUser!.email}");
             sortList.add("${value.docs[i].id}");
             sortList.sort();
-            diaList.add(value.docs[i].id);
-            if(value.docs[i].id != FireService.store
-                .collection('chats')
-                .doc("${FireService.auth.currentUser!.email}")
-                .collection("${FireService.auth.currentUser!.email}")
-                .doc("${value.docs[i].id}")){
+            // diaList.add(value.docs[i].id);
+            valueId = value.docs[i];
 
-              FireService.store
+            // if (value.docs[i].id !=
+            //     FireService.store
+            //         .collection('chats')
+            //         .doc("${FireService.auth.currentUser!.email}")
+            //         .collection("${FireService.auth.currentUser!.email}")
+            //         .doc("${value.docs[i].id}")) {
+            FireService.store
                 .collection('chats')
                 .doc("${FireService.auth.currentUser!.email}")
                 .collection("${FireService.auth.currentUser!.email}")
-                .doc("${value.docs[i].id}")
+                .doc(
+                    "${value.docs[i].id}") // tanlangan value currentuserga yozilyabti
                 .set({
               "avatar_image_url": value.docs[i]['avatar_image_url'],
               "firstname": value.docs[i]['firstname'],
               "lastname": value.docs[i]['lastname'],
               "created_at": value.docs[i]['created_at'],
             });
-                }
+            // }
             print(sortList);
           }
+
         }
       });
     } catch (e) {
@@ -53,53 +58,74 @@ class SendMessageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future dialogWith(
-    String secondEmail,
-  ) async {
+  Future second() async {
     try {
       await FireService.store.collection('chats').get().then((value) {
-        sortList.clear();
         for (var i = 0; i < value.docs.length; i++) {
-          usersList.add(value.docs[i].id.toString());
-          if (secondEmail == value.docs[i].id) {
-            sortList.add("${FireService.auth.currentUser!.email}");
-            sortList.add("${value.docs[i].id}");
-            sortList.sort();
-            diaList.add(value.docs[i].id);
-            FireService.store
-                .collection('chats')
-                .doc("${FireService.auth.currentUser!.email}")
-                .collection("${FireService.auth.currentUser!.email}")
-                .doc("${value.docs[i].id}")
-                .set({
-              "avatar_image_url": value.docs[i]['avatar_image_url'],
-              "firstname": value.docs[i]['firstname'],
-              "lastname": value.docs[i]['lastname'],
-              "created_at": value.docs[i]['created_at'],
-            });
-
-            FireService.store
-                .collection('chats')
-                .doc("${value.docs[i].id}")
-                .collection("${value.docs[i].id}")
-                .doc("${FireService.auth.currentUser!.email}")
-                .set({
-              "avatar_image_url": value.docs[i]['avatar_image_url'],
-              "firstname": value.docs[i]['firstname'],
-              "lastname": value.docs[i]['lastname'],
-              "created_at": value.docs[i]['created_at'],
-            });
-
-            // print(sortList);
-          }
+            if (FireService.auth.currentUser!.email == value.docs[i].id) {
+              FireService.store
+                  .collection('chats')
+                  .doc("${valueId.id}")
+                  .collection("${valueId.id}")
+                  .doc("${FireService.auth.currentUser!.email}")
+                  .set({
+                "avatar_image_url": value.docs[i]['avatar_image_url'],
+                "firstname": value.docs[i]['firstname'],
+                "lastname": value.docs[i]['lastname'],
+                "created_at": value.docs[i]['created_at'],
+              });
+            }
         }
       });
     } catch (e) {
-      print("error");
+      print(e);
     }
-    notifyListeners();
   }
 
+  // Future dialogWith(
+  //   String secondEmail,
+  // ) async {
+  //   try {
+  //     await FireService.store.collection('chats').get().then((value) {
+  //       sortList.clear();
+  //       for (var i = 0; i < value.docs.length; i++) {
+  //         usersList.add(value.docs[i].id.toString());
+  //         if (secondEmail == value.docs[i].id) {
+  //           sortList.add("${FireService.auth.currentUser!.email}");
+  //           sortList.add("${value.docs[i].id}");
+  //           sortList.sort();
+  //           diaList.add(value.docs[i].id);
+  //           FireService.store
+  //               .collection('chats')
+  //               .doc("${FireService.auth.currentUser!.email}")
+  //               .collection("${FireService.auth.currentUser!.email}")
+  //               .doc("${value.docs[i].id}")
+  //               .set({
+  //             "avatar_image_url": value.docs[i]['avatar_image_url'],
+  //             "firstname": value.docs[i]['firstname'],
+  //             "lastname": value.docs[i]['lastname'],
+  //             "created_at": value.docs[i]['created_at'],
+  //           });
+  //           FireService.store
+  //               .collection('chats')
+  //               .doc("${value.docs[i].id}")
+  //               .collection("${value.docs[i].id}")
+  //               .doc("${FireService.auth.currentUser!.email}")
+  //               .set({
+  //             "avatar_image_url": value.docs[i]['avatar_image_url'],
+  //             "firstname": value.docs[i]['firstname'],
+  //             "lastname": value.docs[i]['lastname'],
+  //             "created_at": value.docs[i]['created_at'],
+  //           });
+  //           // print(sortList);
+  //         }
+  //       }
+  //     });
+  //   } catch (e) {
+  //     print("error");
+  //   }
+  //   notifyListeners();
+  // }
 
   // Future dialogWith()async{
   //   // try {
@@ -192,7 +218,7 @@ class SendMessageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String? last;
+  List? last;
 
   Future updateList() async {
     try {
@@ -204,8 +230,9 @@ class SendMessageProvider extends ChangeNotifier {
           .get()
           .then((value) {
         messageList = value.data()!['messageList'];
-        last = value.data()!['messageList'].last['message'];
-        print(messageList);
+        // last!.add(messageList.last['message'].toString());
+        print(messageList.last['message']);
+        // print(last);
       });
     } catch (e) {
       print(e);
