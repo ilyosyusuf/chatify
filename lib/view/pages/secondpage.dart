@@ -1,8 +1,5 @@
 import 'package:awesome_icons/awesome_icons.dart';
-import 'package:chat_bubbles/bubbles/bubble_normal.dart';
-import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
-import 'package:chat_bubbles/bubbles/bubble_special_two.dart';
 import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/core/constants/colors.dart';
 import 'package:chatify/core/extensions/context_extensions.dart';
@@ -14,25 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-// class SecondPage extends StatefulWidget {
-//   const SecondPage({Key? key}) : super(key: key);
-
-//   @override
-//   State<SecondPage> createState() => _SecondPageState();
-// }
-
 class SecondPage extends StatelessWidget {
   String? name;
   String? imageurl;
   SecondPage({Key? key, this.name, this.imageurl}) : super(key: key);
   bool issender = false;
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   // print(object)
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +31,6 @@ class SecondPage extends StatelessWidget {
             .doc('${sort1 + sort2}')
             .collection('coll')
             .snapshots(),
-        // stream: FireService.store.collection('/messages/a@gmail.comc@gmail.com/coll').snapshots(),
-        // doc('${sort1+sort2}').collection('messageList').snapshots(),
-
-        // collection('messages/${context.watch<SendMessageProvider>().sortList.first+context.watch<SendMessageProvider>().sortList.last}/messageList').snapshots(),
-        // .orderBy("sent_at")
-        // .snapshots(),
         builder: (context, snap) {
           if (!snap.hasData) {
             return const Center(
@@ -65,15 +42,6 @@ class SecondPage extends StatelessWidget {
             );
           } else {
             var data = snap.data!.docs[0];
-            // print("DAAATTTAAAA $data");
-            // users.sort();
-            print("${sort1 + sort2}");
-            // print(data[0]['from']);
-            // print(snap.data!.docs[0]);
-            // print(snap.data!.docs[0]['messageList'][0]['message']);
-            // return Container();
-            // print("${FireService.store.collection('messages').doc("${users[0]}")}");
-            // print("${FireService.store.collection('messages/$users/${messageList}')}");
             return SafeArea(
               child: Column(
                 children: [
@@ -83,63 +51,65 @@ class SecondPage extends StatelessWidget {
                       child: Row(
                         children: [
                           IconButton(
-                            icon: Icon(Icons.chevron_left_rounded),
+                            icon: const Icon(Icons.chevron_left_rounded),
                             onPressed: () {
                               Navigator.pushNamedAndRemoveUntil(
                                   context, '/home', (route) => false);
                             },
                           ),
-                          CircleAvatar(backgroundImage: NetworkImage(imageurl.toString()),),
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(imageurl.toString()),
+                          ),
                           SizedBox(width: size.width * 0.02),
                           Text(
                             name.toString(),
-                            style: TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 20),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           IconButton(
-                            icon: Icon(Icons.group_add_rounded),
+                            icon: const Icon(Icons.group_add_rounded),
                             onPressed: () {},
                           ),
                         ],
                       )),
                   Expanded(
                     child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/images/tgbackground.png'))
-                      ),
-                      // height: 500,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                  'assets/images/tgbackground.png'))),
                       child: data['messageList'].isNotEmpty
                           ? ListView.builder(
-                            // clipBehavior: Clip.antiAliasWithSaveLayer,
                               dragStartBehavior: DragStartBehavior.down,
-                              // reverse: true,
-                              // shrinkWrap: true,
                               itemBuilder: (context, i) {
                                 return BubbleSpecialThree(
                                   key: UniqueKey(),
                                   text: data['messageList']
-                                      // .reversed
-                                      .toList()[i]['message'].toString(),
-                                  color: data['messageList'][i]['email_from'] == FireService.auth.currentUser!.email.toString() ?Color(0xFF1B97F3) : Colors.grey,
-                                  // color: ColorConst.kPrimaryColor,
+                                      .toList()[i]['message']
+                                      .toString(),
+                                  color: data['messageList'][i]['email_from'] ==
+                                          FireService.auth.currentUser!.email
+                                              .toString()
+                                      ? Color(0xFF1B97F3)
+                                      : Colors.grey,
                                   tail: false,
-                                  isSender: data['messageList'][i]['email_from'] == FireService.auth.currentUser!.email.toString() ? true : false,
+                                  isSender: data['messageList'][i]
+                                              ['email_from'] ==
+                                          FireService.auth.currentUser!.email
+                                              .toString()
+                                      ? true
+                                      : false,
                                   textStyle: TextStyle(
                                       color: Colors.white, fontSize: 18),
                                 );
-                                // return ListTile(
-                                //   title: Text(data['messageList']
-                                //       .reversed
-                                //       .toList()[i]['message']),
-                                // );
                               },
                               itemCount: data['messageList'].length,
                             )
                           : Center(
-                            child: Lottie.asset('assets/lotties/nomessages.json', width: 200)
-                          ),
+                              child: Lottie.asset(
+                                  'assets/lotties/nomessages.json',
+                                  width: 200)),
                     ),
                   ),
                   Row(
@@ -159,7 +129,7 @@ class SecondPage extends StatelessWidget {
                           child: CircleAvatar(
                               radius: size.width * 0.065,
                               backgroundColor: ColorConst.kPrimaryColor,
-                              child: Icon(
+                              child: const Icon(
                                 FontAwesomeIcons.paperPlane,
                                 color: Colors.white,
                               )),
@@ -170,18 +140,9 @@ class SecondPage extends StatelessWidget {
                             await context
                                 .read<SendMessageProvider>()
                                 .sendMessage("men", _controller.text);
-                                // data['messageList'][i]['email_from'] == FireService.auth.currentUser!.email.toString();
                           },
                         ),
                       )
-                      //                   ElevatedButton(
-                      // onPressed: () async {
-                      //   await context.read<SendMessageProvider>().updateList();
-                      //   await context
-                      //       .read<SendMessageProvider>()
-                      //       .sendMessage("men", _controller.text);
-                      // },
-                      // child: Icon(Icons.send)),
                     ],
                   )
                 ],

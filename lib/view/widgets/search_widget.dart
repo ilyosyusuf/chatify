@@ -13,27 +13,28 @@ class SearchWidget extends StatelessWidget {
     return Container(
       child: ListView.builder(
           itemBuilder: (context, i) {
+            List setList =
+                context.watch<SendMessageProvider>().setList.toList();
+            var profunc = context.read<SendMessageProvider>();
             return ListTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "${context.watch<SendMessageProvider>().setList.toList()[i]['avatar_image_url']}"),
+                backgroundImage:
+                    NetworkImage("${setList[i]['avatar_image_url']}"),
               ),
-              title: Text(
-                  "${context.watch<SendMessageProvider>().setList.toList()[i]['firstname']}"),
-              subtitle: Text(
-                  "${context.watch<SendMessageProvider>().setList.toList()[i].id}"),
+              title: Text("${setList[i]['firstname']}"),
+              subtitle: Text("${setList[i].id}"),
               onTap: () async {
-                await context.read<SendMessageProvider>().bindUsers(
+                await profunc.bindUsers(
                     Provider.of<SendMessageProvider>(context, listen: false)
                         .setList
                         .toList()[i]
                         .id);
-                await context.read<SendMessageProvider>().second();
-                if (context.read<SendMessageProvider>().messageList.isEmpty) {
-                  await context.read<SendMessageProvider>().createColl();
+                await profunc.second();
+                if (profunc.messageList.isEmpty) {
+                  await profunc.createColl();
                 }
-                await context.read<SendMessageProvider>().createField();
-                await context.read<SendMessageProvider>().updateList();
+                await profunc.createField();
+                await profunc.updateList();
                 Navigator.push(
                   context,
                   MaterialPageRoute(

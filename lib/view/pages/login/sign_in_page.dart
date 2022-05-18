@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:chatify/core/components/box_decoration_widget.dart';
 import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/core/constants/colors.dart';
 import 'package:chatify/core/extensions/context_extensions.dart';
@@ -41,11 +40,10 @@ class SignInPage extends StatelessWidget {
                           children: [
                             FadeInLeft(
                               child: Container(
-                                // decoration: MyBoxDecoration.decor,
                                 child: MyTextField.textField(
                                     text: "Enter Email",
                                     controller: emailController,
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       Icons.email,
                                       color: ColorConst.kPrimaryColor,
                                     )),
@@ -60,7 +58,7 @@ class SignInPage extends StatelessWidget {
                                   text: "Enter Password",
                                   controller: passwordController,
                                   obscure: isShown,
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                     Icons.lock,
                                     color: ColorConst.kPrimaryColor,
                                   ),
@@ -81,49 +79,50 @@ class SignInPage extends StatelessWidget {
                         ),
                       ),
                       FadeInUp(
-                          child: ElevatedButtonWidget(
-                              onPressed: () async {
-                                await WriteService().signIn(
-                                    context,
-                                    emailController.text,
-                                    passwordController.text);
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context, '/home', (route) => false);
-                              },
-                              text: "Sign In")),
+                        child: ElevatedButtonWidget(
+                            onPressed: () async {
+                              await WriteService().signIn(
+                                  context,
+                                  emailController.text,
+                                  passwordController.text);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/home', (route) => false);
+                            },
+                            text: "Sign In"),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
             Expanded(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FadeInUpBig(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Sign Up",
-                                style:
-                                    TextStyle(color: ColorConst.kPrimaryColor),
-                              ))
-                        ],
-                      ),
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FadeInUpBig(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Don't have an account?",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              "Sign Up",
+                              style: TextStyle(color: ColorConst.kPrimaryColor),
+                            ))
+                      ],
                     ),
-                    SizedBox(
-                      height: 20.0,
-                    )
-                  ],
-                ))
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),

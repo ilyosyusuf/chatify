@@ -25,15 +25,7 @@ class SendMessageProvider extends ChangeNotifier {
             sortList.add("${FireService.auth.currentUser!.email}");
             sortList.add("${value.docs[i].id}");
             sortList.sort();
-            // diaList.add(value.docs[i].id);
             valueId = value.docs[i];
-
-            // if (value.docs[i].id !=
-            //     FireService.store
-            //         .collection('chats')
-            //         .doc("${FireService.auth.currentUser!.email}")
-            //         .collection("${FireService.auth.currentUser!.email}")
-            //         .doc("${value.docs[i].id}")) {
             FireService.store
                 .collection('chats')
                 .doc("${FireService.auth.currentUser!.email}")
@@ -46,10 +38,8 @@ class SendMessageProvider extends ChangeNotifier {
               "lastname": value.docs[i]['lastname'],
               "created_at": value.docs[i]['created_at'],
             });
-            // }
             print(sortList);
           }
-
         }
       });
     } catch (e) {
@@ -62,98 +52,26 @@ class SendMessageProvider extends ChangeNotifier {
     try {
       await FireService.store.collection('chats').get().then((value) {
         for (var i = 0; i < value.docs.length; i++) {
-            if (FireService.auth.currentUser!.email == value.docs[i].id) {
-              FireService.store
-                  .collection('chats')
-                  .doc("${valueId.id}")
-                  .collection("${valueId.id}")
-                  .doc("${FireService.auth.currentUser!.email}")
-                  .set({
-                "avatar_image_url": value.docs[i]['avatar_image_url'],
-                "firstname": value.docs[i]['firstname'],
-                "lastname": value.docs[i]['lastname'],
-                "created_at": value.docs[i]['created_at'],
-              });
-            }
+          if (FireService.auth.currentUser!.email == value.docs[i].id) {
+            FireService.store
+                .collection('chats')
+                .doc("${valueId.id}")
+                .collection("${valueId.id}")
+                .doc("${FireService.auth.currentUser!.email}")
+                .set({
+              "avatar_image_url": value.docs[i]['avatar_image_url'],
+              "firstname": value.docs[i]['firstname'],
+              "lastname": value.docs[i]['lastname'],
+              "created_at": value.docs[i]['created_at'],
+            });
+          }
         }
       });
     } catch (e) {
       print(e);
     }
   }
-
-  // Future dialogWith(
-  //   String secondEmail,
-  // ) async {
-  //   try {
-  //     await FireService.store.collection('chats').get().then((value) {
-  //       sortList.clear();
-  //       for (var i = 0; i < value.docs.length; i++) {
-  //         usersList.add(value.docs[i].id.toString());
-  //         if (secondEmail == value.docs[i].id) {
-  //           sortList.add("${FireService.auth.currentUser!.email}");
-  //           sortList.add("${value.docs[i].id}");
-  //           sortList.sort();
-  //           diaList.add(value.docs[i].id);
-  //           FireService.store
-  //               .collection('chats')
-  //               .doc("${FireService.auth.currentUser!.email}")
-  //               .collection("${FireService.auth.currentUser!.email}")
-  //               .doc("${value.docs[i].id}")
-  //               .set({
-  //             "avatar_image_url": value.docs[i]['avatar_image_url'],
-  //             "firstname": value.docs[i]['firstname'],
-  //             "lastname": value.docs[i]['lastname'],
-  //             "created_at": value.docs[i]['created_at'],
-  //           });
-  //           FireService.store
-  //               .collection('chats')
-  //               .doc("${value.docs[i].id}")
-  //               .collection("${value.docs[i].id}")
-  //               .doc("${FireService.auth.currentUser!.email}")
-  //               .set({
-  //             "avatar_image_url": value.docs[i]['avatar_image_url'],
-  //             "firstname": value.docs[i]['firstname'],
-  //             "lastname": value.docs[i]['lastname'],
-  //             "created_at": value.docs[i]['created_at'],
-  //           });
-  //           // print(sortList);
-  //         }
-  //       }
-  //     });
-  //   } catch (e) {
-  //     print("error");
-  //   }
-  //   notifyListeners();
-  // }
-
-  // Future dialogWith()async{
-  //   // try {
-  //   //   await FireService.store.collection('chats').doc("${FireService.auth.currentUser!.email}").update({
-  //   //       "dialogWith": diaList
-  //   //   });
-  //   //   SetOptions(merge: true);
-  //   //   notifyListeners();
-  //   // } catch (e) {
-  //   //   print(e);
-  //   // }
-  //   try {
-  //   } catch (e) {
-  //     print('dialogWith $e');
-  //   }
-  // }
-
-  // Future fillDial()async{
-  //   try {
-  //     await FireService.store.collection('chats').doc("${FireService.auth.currentUser!.email}").get().then((value){
-  //       diaList = value.data()!['dialogWith'];
-  //     });
-  //     notifyListeners();
-  //   } catch (e) {
-  //     print('fillDial $e');
-  //   }
-  // }
-
+  
   Future createColl() async {
     try {
       await FireService.store
@@ -230,7 +148,6 @@ class SendMessageProvider extends ChangeNotifier {
           .get()
           .then((value) {
         messageList = value.data()!['messageList'];
-        // last!.add(messageList.last['message'].toString());
         print(messageList.last['message']);
         // print(last);
       });
@@ -239,31 +156,17 @@ class SendMessageProvider extends ChangeNotifier {
     }
   }
 
-  // Future deleteDoc() async{
-  //   try {
-  //       await FireService.store
-  //         .collection('messages')
-  //         .doc("${sortList.first}${sortList.last}").delete();
-  //         notifyListeners();
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
   Future loginWithOtp(String phoneController) async {
     await FireService.auth.verifyPhoneNumber(
       phoneNumber: phoneController,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await FireService.auth.signInWithCredential(credential);
-        // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=> MyHomePage()), (route) => false);
         print("Excellent");
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          // showSnackBar('The provided phone number is not valid', Colors.red);
           print('The provided phone number is not valid');
         } else {
-          // showSnackBar('Another Error Type!', Colors.red);
           print('Another Error Type!');
         }
       },
@@ -279,8 +182,6 @@ class SendMessageProvider extends ChangeNotifier {
         } catch (e) {
           print(e);
         }
-        // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (ctx)=> MyHomePage()), (route) => false);
-        // print("excellent");
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -297,7 +198,6 @@ class SendMessageProvider extends ChangeNotifier {
         } else {
           allData.add(item);
         }
-        // print(allData);
       }
     });
   }
@@ -305,7 +205,6 @@ class SendMessageProvider extends ChangeNotifier {
   Future searchIt(String text) async {
     setList.clear();
     for (var i = 0; i < allData.length; i++) {
-      // print(allData[i]);
       if (text.isEmpty) {
         setList.clear();
         notifyListeners();

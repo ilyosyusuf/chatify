@@ -48,6 +48,8 @@ dependencies:
   awesome_icons: ^1.1.0
   chat_bubbles: ^1.2.0
   connectivity_plus: ^2.3.0
+  intl_phone_number_input: ^0.7.0+2
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:

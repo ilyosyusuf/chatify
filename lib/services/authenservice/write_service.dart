@@ -32,8 +32,6 @@ class WriteService {
     }
   }
 
-
-
   Future fillProfile(BuildContext context, XFile file, String firstname,
       String lastname) async {
     try {
@@ -62,7 +60,6 @@ class WriteService {
     }
   }
 
-
   Future signIn(BuildContext context, String emailController,
       String passwordController) async {
     try {
@@ -70,15 +67,12 @@ class WriteService {
         email: emailController,
         password: passwordController,
       );
-        // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-       print(e);
+        print(e);
       } else if (e.code == 'wrong-password') {
         print(e);
-
       }
     }
-
   }
 }

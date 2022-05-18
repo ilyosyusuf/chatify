@@ -2,7 +2,6 @@ import 'package:chatify/core/components/text_field.dart';
 import 'package:chatify/core/extensions/context_extensions.dart';
 import 'package:chatify/providers/send_message_provider.dart';
 import 'package:chatify/services/firebase/fire_service.dart';
-import 'package:chatify/services/firebase/read_service.dart';
 import 'package:chatify/view/pages/secondpage.dart';
 import 'package:chatify/view/widgets/search_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,12 +37,12 @@ class _ChatPageState extends State<ChatPage> {
                 child: Row(
                   children: [
                     SizedBox(width: context.w * 0.03),
-                    Text(
+                    const Text(
                       "Chats",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Spacer(),
+                    const Spacer(),
                   ],
                 )),
             Expanded(
@@ -75,76 +74,69 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Expanded(
               flex: 9,
-              child: Container(
-                child: StreamBuilder<QuerySnapshot<Map>>(
-                  stream: FireService.store
-                      .collection('chats')
-                      .doc('${FireService.auth.currentUser!.email}')
-                      .collection('${FireService.auth.currentUser!.email}')
-                      .snapshots(),
-                  builder: (context, snap) {
-                    if (!snap.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    } else if (snap.hasError) {
-                      return Center(
-                        child: Text(
-                          "No Internet",
-                        ),
-                      );
-                    } else {
-                      return _searchController.text.isEmpty
-                          ? Container(
-                              child: ListView.builder(
-                                  itemBuilder: (context, i) {
-                                    return ListTile(
-                                      leading: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            '${snap.data!.docs[i]['avatar_image_url']}'),
-                                      ),
-                                      title: Text(
-                                          '${snap.data!.docs[i]['firstname']}'),
-                                      subtitle: Text(
-                                          '${snap.data!.docs[i].id}'),
-                                      // subtitle: Text(
-                                      //     "${Provider.of<SendMessageProvider>(context, listen: false).messageList.last['message']}"),
-                                      // subtitle: Text(
-                                      //     "${context.watch<SendMessageProvider>().last ?? "Send message first"}",
-                                      //     overflow: TextOverflow.clip,
-                                      //     maxLines: 1),
-                                      onTap: () async {
-                                        await context
-                                            .read<SendMessageProvider>()
-                                            .bindUsers(snap.data!.docs[i].id
-                                                .toString());
-                                                await context.read<SendMessageProvider>().second();
-                                        await context
-                                            .read<SendMessageProvider>()
-                                            .createField();
-                                        await context
-                                            .read<SendMessageProvider>()
-                                            .updateList();
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => SecondPage(
-                                              name: snap.data!.docs[i]
-                                                  ['firstname'],
-                                              imageurl: snap.data!.docs[i]
-                                                  ['avatar_image_url'],
-                                            ),
+              child: StreamBuilder<QuerySnapshot<Map>>(
+                stream: FireService.store
+                    .collection('chats')
+                    .doc('${FireService.auth.currentUser!.email}')
+                    .collection('${FireService.auth.currentUser!.email}')
+                    .snapshots(),
+                builder: (context, snap) {
+                  if (!snap.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    );
+                  } else if (snap.hasError) {
+                    return const Center(
+                      child: Text(
+                        "No Internet",
+                      ),
+                    );
+                  } else {
+                    return _searchController.text.isEmpty
+                        ? Container(
+                            child: ListView.builder(
+                                itemBuilder: (context, i) {
+                                  return ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          '${snap.data!.docs[i]['avatar_image_url']}'),
+                                    ),
+                                    title: Text(
+                                        '${snap.data!.docs[i]['firstname']}'),
+                                    subtitle: Text('${snap.data!.docs[i].id}'),
+                                    onTap: () async {
+                                      await context
+                                          .read<SendMessageProvider>()
+                                          .bindUsers(
+                                              snap.data!.docs[i].id.toString());
+                                      await context
+                                          .read<SendMessageProvider>()
+                                          .second();
+                                      await context
+                                          .read<SendMessageProvider>()
+                                          .createField();
+                                      await context
+                                          .read<SendMessageProvider>()
+                                          .updateList();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SecondPage(
+                                            name: snap.data!.docs[i]
+                                                ['firstname'],
+                                            imageurl: snap.data!.docs[i]
+                                                ['avatar_image_url'],
                                           ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  itemCount: snap.data!.docs.length),
-                            )
-                          : SearchWidget();
-                    }
-                  },
-                ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                itemCount: snap.data!.docs.length),
+                          )
+                        : SearchWidget();
+                  }
+                },
               ),
             ),
           ],
